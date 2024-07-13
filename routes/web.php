@@ -5,6 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Store;
 use App\Http\Controllers\User;
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\UserResourceCollection;
+use App\Http\Resources\CatergoryResources;
+use App\Models\Product;
+use App\Models\Category;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -170,8 +176,21 @@ Route::prefix('admin')->group(function() {
         
     });
 });
+
 /** ----------- Admin Routes requiring Authentication ends here ---------------- */
 
+Route::get('userproduct/{id}', function($id){
+    return new ProductResource(Product::findOrFail($id));
+});
+
+Route::get('catergory', function(){
+    return CatergoryResources::collection(Category::all());
+});
+
+
+Route::get('userproduct', function(){
+    return new UserResourceCollection(Product::all());
+});
 
 require __DIR__.'/adminauth.php';
 require __DIR__.'/auth.php';
